@@ -16,6 +16,17 @@ export default class SearchableMovieReviewsContainer extends Component {
       };
     }
 
+    handleChange = (event) => {
+        this.setState({ searchTerm: event.target.value });
+      };
+    
+      sendSearch = (event) => {
+        event.preventDefault();
+        fetch(`${URL}&query=${this.state.searchTerm}`)
+          .then((response) => response.json())
+          .then((json) => this.setState({ reviews: json.results }));
+      };
+
 
 
     render() {
@@ -32,3 +43,13 @@ export default class SearchableMovieReviewsContainer extends Component {
                   value={this.state.searchTerm}
                   placeholder="Search for a movie"
                 />
+                  <button type="submit">Search</button>
+          </form>
+        </div>
+        {typeof this.state.reviews === "object" &&
+          this.state.reviews.length > 0 && <h2>By Search:</h2>}
+        <MovieReviews reviews={this.state.reviews} />
+      </div>
+    );
+  }
+}
